@@ -60,6 +60,26 @@ void clear() {
 
 // Automatas logic
 
+// Conway
+
+void delay(int count) {
+    for (volatile int i = 0; i < count; i++) {
+    }
+}
+
+int count_neighbors(int current[HEIGHT][WIDTH], int row, int col) {
+    int count = 0;
+    for(int i = row - 1; i <= row + 1; i++) {
+        for(int j = col - 1; j <= col + 1; j++) {
+            if(i == row && j == col) continue; // skip self
+            if(i >= 0 && i < HEIGHT && j >= 0 && j < WIDTH) {
+                count += current[i][j];
+            }
+        }
+    }
+    return count;
+}
+
 void conway() {
     int current[HEIGHT][WIDTH] = {0};
     int next[HEIGHT][WIDTH] = {0};
@@ -75,13 +95,46 @@ void conway() {
             for (int x = 0; x < WIDTH; x++) {
                 if (current[y][x] == 1) {
                     print("#", x, y, 0x02);
+                } else {
+                    print("#", x, y, 0x04);
                 }
             }
         }
+
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
+                int neighbors = count_neighbors(current, y, x);
+
+                if (current[y][x] == 1) {
+                    if (neighbors == 2 || neighbors == 3) {
+                        next[y][x] = 1;
+                    } else {
+                        next[y][x] = 0;
+                    }
+                } else {
+                    if (neighbors == 3) {
+                        next[y][x] = 1;
+                    } else {
+                        next[y][x] = 0;
+                    }
+                }
+            }
+        }
+
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
+                current[y][x] = next[y][x];
+            }
+        }
+
+        delay(10000000);
     }
 }
 
-// End
+// End Conway
+
+// End automatas
+
 // Kernel
 
 void kernel_main() {
