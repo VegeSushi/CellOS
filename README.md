@@ -11,6 +11,7 @@ It is a collection of different Cellular Automatas
 - binutils
 - nasm
 - grub-pc-bin
+- make
 - qemu *(Optional for running)*
 
 ## Compiling:
