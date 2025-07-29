@@ -25,3 +25,8 @@ Either burn to a physical CD or run:
 ```bash
 make run
 ```
+
+# Notes:
+
+- Only PS/2 keyboards are supported
+- Only VGA output is supported

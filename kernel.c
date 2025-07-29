@@ -58,14 +58,14 @@ void clear() {
     }
 }
 
-// Automatas logic
-
-// Conway
-
 void delay(int count) {
     for (volatile int i = 0; i < count; i++) {
     }
 }
+
+// Automatas logic
+
+// Conway
 
 int count_neighbors(int current[HEIGHT][WIDTH], int row, int col) {
     int count = 0;
@@ -133,6 +133,47 @@ void conway() {
 
 // End Conway
 
+// Langton's Ant
+
+void langtons_ant() {
+    int grid[HEIGHT][WIDTH] = {0};
+    int dir = 0;
+
+    int x = WIDTH / 2;
+    int y = HEIGHT / 2;
+
+    while (1) {
+        for (int row = 0; row < HEIGHT; row++) {
+            for (int col = 0; col < WIDTH; col++) {
+                if (row == y && col == x) {
+                    print("#", col, row, 0x14);
+                } else if (grid[row][col] == 0) {
+                    print("#", col, row, 0x38);
+                } else {
+                    print("#", col, row, 0x3F);
+                }
+            }
+        }
+
+        if (grid[y][x] == 0) {
+            dir = (dir + 1) % 4;
+            grid[y][x] = 1;
+        } else {
+            dir = (dir + 3) % 4;
+            grid[y][x] = 0;
+        }
+
+        if (dir == 0) y = (y - 1 + HEIGHT) % HEIGHT;
+        else if (dir == 1) x = (x + 1) % WIDTH;
+        else if (dir == 2) y = (y + 1) % HEIGHT;
+        else if (dir == 3) x = (x - 1 + WIDTH) % WIDTH;
+
+        delay(10000000);
+    }
+}
+
+// End Langton's Ant
+
 // End automatas
 
 // Kernel
@@ -141,13 +182,14 @@ void kernel_main() {
     clear();
     print("Select an automata:", 0, 0, 0x0F);
     print("1. Conway's Game Of Life", 0, 1, 0x07);
+    print("2. Langton's Ant", 0, 2, 0x07);
 
     char key;
 
     while (1) {
         key = wait_for_keypress();
 
-        if (key == 0x02) {
+        if (key == 0x02 || key == 0x03) {
             break;
         }
     }
@@ -158,5 +200,7 @@ void kernel_main() {
 
     if (key == 0x02) {
         conway();
+    } else if (key == 0x03) {
+        langtons_ant();
     }
 }
